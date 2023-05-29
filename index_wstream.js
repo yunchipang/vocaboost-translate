@@ -1,6 +1,10 @@
 const { GoogleTranslator } = require('@translate-tools/core/translators/GoogleTranslator');
 
-const input = require('./input.js');
+// todo: setup filenames
+const input_filename = './toefl.js'
+const output_filename =  './toefl_output.js'
+
+const input = require(input_filename);
 
 const translator = new GoogleTranslator({
 	headers: {
@@ -12,7 +16,8 @@ const translator = new GoogleTranslator({
 // Translate the meaning
 async function translateMeaning(meaning) {
 	const result = {};
-	for (const lang of ['ja', 'ko', 'th']) {
+    // todo: setup languages
+	for (const lang of ['es', 'zh_TW', 'zh_CN', 'ja', 'ko', 'th']) {
 	  result[lang] = await translator.translate(meaning, 'en', lang);
 	}
 	// console.log(result);
@@ -26,7 +31,7 @@ const { promisify } = require('util');
 const pipelineAsync = promisify(pipeline);
 
 async function translateAndWrite(input) {
-    const writeStream = fs.createWriteStream('./output2.js', { flags: 'w' });
+    const writeStream = fs.createWriteStream(output_filename, { flags: 'w' });
     writeStream.write('module.exports = [\n');
 
     for (let i = 0; i < input.length; i++) {
